@@ -5,8 +5,8 @@ NAME = "3D-printed Metric Threads"
 UNIT = "mm"
 ANGLE = 60.0
 SIZES = list(range(16, 30+2, 2))
-# SIZES = [15.0, 30.0]
 PITCHES = [3.5, 5.0]
+OFFSETS = [.0, .1, .2, .3]
 
 
 def designator(val: float):
@@ -48,11 +48,10 @@ class Metric3Dprinted(ThreadProfile):
             self.name = "M{}x{}".format(designator(self.size), designator(self.pitch))
 
         def depth(self):
-            # return 5.0 if self.size >= 20.0 else 3.5
             return self.pitch
 
     def __init__(self):
-        self.offsets = [.0, .1, .2, .3]
+        self.offsets = OFFSETS
 
     def sizes(self):
         return SIZES
@@ -65,7 +64,7 @@ class Metric3Dprinted(ThreadProfile):
         for offset in self.offsets:
             offset_decimals = str(offset)[2:]  # skips the '0.' at the start
             depth = designation.depth()
-
+            # the tolerances below are based on ISO M30x3.5 6g/6H
             t = Thread()
             t.gender = "external"
             t.clazz = "O.{}".format(offset_decimals)
