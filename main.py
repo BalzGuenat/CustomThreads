@@ -4,9 +4,9 @@ from abc import ABC, abstractmethod
 NAME = "3D-printed Metric Threads"
 UNIT = "mm"
 ANGLE = 60.0
-SIZES = list(range(16, 30+2, 2))
+SIZES = list(range(8, 51))
 PITCHES = [3.5, 5.0]
-OFFSETS = [.0, .1, .2, .3]
+OFFSETS = [.0, .1, .2, .4, .8]
 
 
 def designator(val: float):

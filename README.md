@@ -9,9 +9,9 @@ The provided `3DPrintedMetric.xml` file contains the thread profiles listed belo
 Additional profiles can be easily generated from the included Python script.
 
 **Shape:** 60° trapezoidal  
-**Size (OD):** 16-30mm (in steps of 2mm)  
+**Size (OD):** 8-50mm  
 **Pitch:** 3.5mm, 5mm  
-**Classes:** O.0, O.1, O.2, O.3
+**Classes:** O.0, O.1, O.2, O.4, O.8
 
 The classes specify tolerances.
 O.0 has the tightest tolerances which are loosely based on ISO M30x3.5 6g/6H. 
@@ -55,7 +55,7 @@ To customize the generated profiles, simply edit the values defined at the top o
 NAME = "3D-printed Metric Threads"
 UNIT = "mm"
 ANGLE = 60.0
-SIZES = list(range(16, 30+2, 2))
+SIZES = list(range(8, 51))
 PITCHES = [3.5, 5.0]
-OFFSETS = [.0, .1, .2, .3]
+OFFSETS = [.0, .1, .2, .4, .8]
 ```
