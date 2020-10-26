@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ThreadType" type="ThreadTypeType"/>
+  <xs:complexType name="ThreadType">
+    <xs:sequence>
+      <xs:element name="Gender">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="external"/>
+            <xs:enumeration value="internal"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="Class" type="xs:string"/>
+      <xs:element type="xs:float" name="MajorDia"/>
+      <xs:element type="xs:float" name="PitchDia"/>
+      <xs:element type="xs:float" name="MinorDia"/>
+      <xs:element type="xs:float" name="TapDrill" minOccurs="0"/>
+      <xs:element name="ThreadForm" minOccurs="0" default="0">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+            <xs:annotation>
+              <xs:documentation>0=Trapezoidal, 1=Sharp, 5=Square, 7=WithWorth</xs:documentation>
+            </xs:annotation>
+            <xs:enumeration value="0"/>
+            <xs:enumeration value="1"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="7"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DesignationType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="ThreadDesignation"/>
+      <xs:element type="xs:string" name="CTD"/>
+      <xs:element type="xs:float" name="Pitch" minOccurs="0"/>
+      <xs:element type="xs:float" name="TPI" minOccurs="0"/>
+      <xs:element type="ThreadType" name="Thread" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ThreadSizeType">
+    <xs:sequence>
+      <xs:element type="xs:float" name="Size"/>
+      <xs:element type="DesignationType" name="Designation" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ThreadTypeType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="Name"/>
+      <xs:element type="xs:string" name="CustomName"/>
+      <xs:element name="Unit">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="mm"/>
+            <xs:enumeration value="in"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="xs:float" name="Angle"/>
+      <xs:element type="xs:integer" name="SortOrder"/>
+      <xs:element type="ThreadSizeType" name="ThreadSize" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
