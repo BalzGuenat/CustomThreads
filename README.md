@@ -37,6 +37,8 @@ When you now create or edit a *Thread* feature, you should be able to select the
 
 ![Select Thread Type in Fusion 360](ss_fusion.png)
 
+> Note: Profiles will need to be reinstalled after every Fusion 360 update. To do this automatically, check out the [ThreadKeeper](https://github.com/thomasa88/ThreadKeeper) plugin.
+
 ## Generating Customized Profiles
 
 You can generate your own thread profile file using the `main.py` script.
