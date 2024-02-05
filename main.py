@@ -79,6 +79,7 @@ class Metric3Dprinted(ThreadProfile):
             t.majorDia = designation.size + offset
             t.pitchDia = designation.size + offset - depth / 4
             t.minorDia = designation.size + offset - depth / 2
+            t.tapDrill = designation.size + offset - depth
             ts.append(t)
         return ts
 
