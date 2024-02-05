@@ -5,7 +5,7 @@ This project defines thread profiles that are aimed at 3D printing so that they 
 
 ## What's in the Box?
 
-The provided `3DPrintedMetric.xml` file contains the thread profiles listed below.
+The provided `3DPrintedMetricV2.xml` file contains the thread profiles listed below.
 Additional profiles can be easily generated from the included Python script.
 
 **Shape:** 60° trapezoidal  
@@ -18,9 +18,11 @@ O.0 has the tightest tolerances which are loosely based on ISO M30x3.5 6g/6H.
 The number after the 'O.' specifies, in tenths of a millimeter, how much the major, minor and pitch diameters are offset compared to O.0.
 For example, O.2 would have a 0.2mm looser tolerance than O.0.
 
+`3DPrintedMetric.xml` contains old thread definitions and is provided for compatibility with older prints or models.
+
 ## Install and Use
 
-If you just want to use the profiles with no customization, download the file `3DPrintedMetric.xml`, save it in the following directory and then restart Fusion 360.
+If you just want to use the profiles with no customization, download the file `3DPrintedMetricV2.xml`, save it in the following directory and then restart Fusion 360.
 
 **On Windows:**
 ```
@@ -54,7 +56,7 @@ This will create a file named `output.xml` in the working directory which you ca
 To customize the generated profiles, simply edit the values defined at the top of `main.py`.
 
 ```python
-NAME = "3D-printed Metric Threads"
+NAME = "3D-printed Metric Threads V2"
 UNIT = "mm"
 ANGLE = 60.0
 SIZES = list(range(8, 51))

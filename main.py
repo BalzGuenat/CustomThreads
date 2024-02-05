@@ -1,7 +1,8 @@
+import math
 import xml.etree.ElementTree as ET
 from abc import ABC, abstractmethod
 
-NAME = "3D-printed Metric Threads"
+NAME = "3D-printed Metric Threads V2"
 UNIT = "mm"
 ANGLE = 60.0
 SIZES = list(range(8, 51))
@@ -41,14 +42,11 @@ class ThreadProfile(ABC):
 
 
 class Metric3Dprinted(ThreadProfile):
-    class Desig:
-        def __init__(self, size, pitch):
-            self.size = size
+    class Designation:
+        def __init__(self, diameter, pitch):
+            self.nominalDiameter = diameter
             self.pitch = pitch
-            self.name = "M{}x{}".format(designator(self.size), designator(self.pitch))
-
-        def depth(self):
-            return self.pitch
+            self.name = "M{}x{}".format(designator(self.nominalDiameter), designator(self.pitch))
 
     def __init__(self):
         self.offsets = OFFSETS
@@ -57,63 +55,71 @@ class Metric3Dprinted(ThreadProfile):
         return SIZES
 
     def designations(self, size):
-        return [Metric3Dprinted.Desig(size, pitch) for pitch in PITCHES]
+        return [Metric3Dprinted.Designation(size, pitch) for pitch in PITCHES]
 
     def threads(self, designation):
         ts = []
         for offset in self.offsets:
             offset_decimals = str(offset)[2:]  # skips the '0.' at the start
-            depth = designation.depth()
-            # the tolerances below are based on ISO M30x3.5 6g/6H
+
+            # see https://en.wikipedia.org/wiki/ISO_metric_screw_thread
+            P = designation.pitch
+            H = 1/math.tan(math.radians(ANGLE/2)) * (P/2)
+            D = designation.nominalDiameter
+            Dp = D - H/2
+            Dmin = D - 5*H/8
+
             t = Thread()
             t.gender = "external"
             t.clazz = "O.{}".format(offset_decimals)
-            t.majorDia = designation.size - offset - .25
-            t.pitchDia = designation.size - offset - depth / 2 - .7
-            t.minorDia = designation.size - offset - depth - .8
+            t.majorDia = D - offset
+            t.pitchDia = Dp - offset
+            t.minorDia = Dmin - offset
             ts.append(t)
 
             t = Thread()
             t.gender = "internal"
             t.clazz = "O.{}".format(offset_decimals)
-            t.majorDia = designation.size + offset + .4
-            t.pitchDia = designation.size + offset - depth / 2 - .4
-            t.minorDia = designation.size + offset - depth
-            t.tapDrill = designation.size + offset - depth
+            t.majorDia = D + offset
+            t.pitchDia = Dp + offset
+            t.minorDia = Dmin + offset
+            t.tapDrill = D - P
             ts.append(t)
         return ts
 
 
-profile = Metric3Dprinted()
+def generate():
+    profile = Metric3Dprinted()
+
+    root = ET.Element('ThreadType')
+    tree = ET.ElementTree(root)
+
+    ET.SubElement(root, "Name").text = NAME
+    ET.SubElement(root, "CustomName").text = NAME
+    ET.SubElement(root, "Unit").text = UNIT
+    ET.SubElement(root, "Angle").text = str(ANGLE)
+    ET.SubElement(root, "SortOrder").text = "3"
+
+    for size in profile.sizes():
+        thread_size_element = ET.SubElement(root, "ThreadSize")
+        ET.SubElement(thread_size_element, "Size").text = str(size)
+        for designation in profile.designations(size):
+            designation_element = ET.SubElement(thread_size_element, "Designation")
+            ET.SubElement(designation_element, "ThreadDesignation").text = designation.name
+            ET.SubElement(designation_element, "CTD").text = designation.name
+            ET.SubElement(designation_element, "Pitch").text = str(designation.pitch)
+            for thread in profile.threads(designation):
+                thread_element = ET.SubElement(designation_element, "Thread")
+                ET.SubElement(thread_element, "Gender").text = thread.gender
+                ET.SubElement(thread_element, "Class").text = thread.clazz
+                ET.SubElement(thread_element, "MajorDia").text = "{:.4g}".format(thread.majorDia)
+                ET.SubElement(thread_element, "PitchDia").text = "{:.4g}".format(thread.pitchDia)
+                ET.SubElement(thread_element, "MinorDia").text = "{:.4g}".format(thread.minorDia)
+                if thread.tapDrill:
+                    ET.SubElement(thread_element, "TapDrill").text = "{:.4g}".format(thread.tapDrill)
+
+    ET.indent(tree)
+    tree.write('output.xml', encoding='UTF-8', xml_declaration=True)
 
 
-root = ET.Element('ThreadType')
-tree = ET.ElementTree(root)
-
-ET.SubElement(root, "Name").text = NAME
-ET.SubElement(root, "CustomName").text = NAME
-ET.SubElement(root, "Unit").text = UNIT
-ET.SubElement(root, "Angle").text = str(ANGLE)
-ET.SubElement(root, "SortOrder").text = "3"
-
-
-for size in profile.sizes():
-    ts = ET.SubElement(root, "ThreadSize")
-    ET.SubElement(ts, "Size").text = str(size)
-    for des in profile.designations(size):
-        deselem = ET.SubElement(ts, "Designation")
-        ET.SubElement(deselem, "ThreadDesignation").text = des.name
-        ET.SubElement(deselem, "CTD").text = des.name
-        ET.SubElement(deselem, "Pitch").text = str(des.pitch)
-        for t in profile.threads(des):
-            elem = ET.SubElement(deselem, "Thread")
-            ET.SubElement(elem, "Gender").text = t.gender
-            ET.SubElement(elem, "Class").text = t.clazz
-            ET.SubElement(elem, "MajorDia").text = "{:.4g}".format(t.majorDia)
-            ET.SubElement(elem, "PitchDia").text = "{:.4g}".format(t.pitchDia)
-            ET.SubElement(elem, "MinorDia").text = "{:.4g}".format(t.minorDia)
-            if t.tapDrill:
-                ET.SubElement(elem, "TapDrill").text = "{:.4g}".format(t.tapDrill)
-
-ET.indent(tree)
-tree.write('output.xml', encoding='UTF-8', xml_declaration=True)
+generate()
