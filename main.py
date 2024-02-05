@@ -68,18 +68,17 @@ class Metric3Dprinted(ThreadProfile):
             t = Thread()
             t.gender = "external"
             t.clazz = "O.{}".format(offset_decimals)
-            t.majorDia = designation.size - offset - .25
-            t.pitchDia = designation.size - offset - depth / 2 - .7
-            t.minorDia = designation.size - offset - depth - .8
+            t.majorDia = designation.size - offset
+            t.pitchDia = designation.size - offset - depth / 4
+            t.minorDia = designation.size - offset - depth / 2
             ts.append(t)
 
             t = Thread()
             t.gender = "internal"
             t.clazz = "O.{}".format(offset_decimals)
-            t.majorDia = designation.size + offset + .4
-            t.pitchDia = designation.size + offset - depth / 2 - .4
-            t.minorDia = designation.size + offset - depth
-            t.tapDrill = designation.size + offset - depth
+            t.majorDia = designation.size + offset
+            t.pitchDia = designation.size + offset - depth / 4
+            t.minorDia = designation.size + offset - depth / 2
             ts.append(t)
         return ts
 
