@@ -119,7 +119,7 @@ def generate():
                     ET.SubElement(thread_element, "TapDrill").text = "{:.4g}".format(thread.tapDrill)
 
     ET.indent(tree)
-    tree.write('output.xml', encoding='UTF-8', xml_declaration=True)
+    tree.write('3DPrintedMetricV2.xml', encoding='UTF-8', xml_declaration=True)
 
 
 generate()
