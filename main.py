@@ -2,7 +2,7 @@ import math
 import xml.etree.ElementTree as ET
 from abc import ABC, abstractmethod
 
-NAME = "3D-printed Metric Threads V2"
+NAME = "3D-printed Metric Threads V3"
 UNIT = "mm"
 ANGLE = 60.0
 SIZES = list(range(8, 51))
@@ -66,8 +66,8 @@ class Metric3Dprinted(ThreadProfile):
             P = designation.pitch
             H = 1/math.tan(math.radians(ANGLE/2)) * (P/2)
             D = designation.nominalDiameter
-            Dp = D - H/2
-            Dmin = D - 5*H/8
+            Dp = D - 2 * 3*H/8
+            Dmin = D - 2 * 5*H/8
 
             t = Thread()
             t.gender = "external"
@@ -119,7 +119,7 @@ def generate():
                     ET.SubElement(thread_element, "TapDrill").text = "{:.4g}".format(thread.tapDrill)
 
     ET.indent(tree)
-    tree.write('3DPrintedMetricV2.xml', encoding='UTF-8', xml_declaration=True)
+    tree.write('3DPrintedMetricV3.xml', encoding='UTF-8', xml_declaration=True)
 
 
 generate()
