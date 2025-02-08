@@ -45,21 +45,52 @@ When you now create or edit a *Thread* feature, you should be able to select the
 
 You can generate your own thread profile file using the `main.py` script.
 To execute the script, **Python 3.9** or newer is required.
-The script has no parameters and can be executed like so:
+The script can be executed like so:
 
 ```bash
 python main.py
 ```
 
-This will create a file named `output.xml` in the working directory which you can then rename and install in Fusion as described above.
+This will create XML files for each configuration defined in the `config.json` file in the working directory, which you can then rename and install in Fusion as described above.
 
-To customize the generated profiles, simply edit the values defined at the top of `main.py`.
+To customize the generated profiles, simply edit the values defined in the `config.json` file.
 
-```python
-NAME = "3D-printed Metric Threads V3"
-UNIT = "mm"
-ANGLE = 60.0
-SIZES = list(range(8, 51))
-PITCHES = [3.5, 5.0]
-OFFSETS = [.0, .1, .2, .4, .8]
+```json
+{
+  "profiles": [
+    {
+      "name": "3DPrintedMetricV3",
+      "customName": "3D-printed Metric Threads V3",
+      "unit": "mm",
+      "angle": 60.0,
+      "sizes": "8:50",
+      "pitches": [3.5, 5.0],
+      "offsets": [0.0, 0.1, 0.2, 0.4, 0.8]
+    }
+  ]
+}
 ```
+
+To use a custom JSON file for the configurations, specify the path to the custom JSON file when executing the script:
+
+```bash
+python main.py path/to/custom/config.json
+```
+
+For example, if your custom configuration file is located at `configs/new_config.json`, you can run the script like this:
+
+```bash
+python main.py configs/new_config.json
+```
+
+This will load the configurations from the specified JSON file and generate the corresponding XML files.
+
+
+
+To see all available options and arguments for the script, you can use the `-h` or `--help` flag:
+
+```bash
+python main.py -h
+```
+
+This will display a help message with descriptions of all the available command-line arguments.

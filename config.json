@@ -1,0 +1,13 @@
+{
+  "profiles": [
+    {
+      "name": "3DPrintedMetricV3",
+      "customName": "3D-printed Metric Threads V3",
+      "unit": "mm",
+      "angle": 60.0,
+      "sizes": "8:50",
+      "pitches": [3.5, 5.0],
+      "offsets": [0.0, 0.1, 0.2, 0.4, 0.8]
+    }
+  ]
+}
