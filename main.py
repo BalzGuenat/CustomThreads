@@ -2,12 +2,65 @@ import math
 import xml.etree.ElementTree as ET
 from abc import ABC, abstractmethod
 
-NAME = "3D-printed Metric Threads V3"
+NAME = "3D-printed Metric Threads V4"
 UNIT = "mm"
 ANGLE = 60.0
-SIZES = list(range(8, 51))
-PITCHES = [3.5, 5.0]
-OFFSETS = [.0, .1, .2, .4, .8]
+SIZES = list(range(1, 51))
+# Standard ISO metric thread pitches for each size
+# Format: {size: [coarse_pitch, fine_pitch1, fine_pitch2, ...]}
+ISO_PITCHES = {
+    1: [0.25, 0.2],
+    2: [0.4, 0.25],
+    3: [0.5, 0.35],
+    4: [0.7, 0.5],
+    5: [0.8, 0.5],
+    6: [1.0, 0.75],
+    7: [1.0],  # Less common
+    8: [1.25, 1.0, 0.75],
+    9: [1.25],  # Less common
+    10: [1.5, 1.25, 1.0],
+    11: [1.5],  # Less common
+    12: [1.75, 1.5, 1.25],
+    13: [1.75],  # Less common
+    14: [2.0, 1.5],
+    15: [2.0],  # Less common
+    16: [2.0, 1.5],
+    17: [2.0],  # Less common
+    18: [2.5, 2.0, 1.5],
+    19: [2.5],  # Less common
+    20: [2.5, 2.0, 1.5],
+    21: [2.5],  # Less common
+    22: [2.5, 2.0, 1.5],
+    23: [2.5],  # Less common
+    24: [3.0, 2.0, 1.5],
+    25: [3.0],  # Less common
+    26: [3.0],  # Less common
+    27: [3.0, 2.0, 1.5],
+    28: [3.0],  # Less common
+    29: [3.0],  # Less common
+    30: [3.5, 2.0, 1.5],
+    31: [3.5],  # Less common
+    32: [3.5],  # Less common
+    33: [3.5, 2.0],
+    34: [3.5],  # Less common
+    35: [3.5],  # Less common
+    36: [4.0, 3.0],
+    37: [4.0],  # Less common
+    38: [4.0],  # Less common
+    39: [4.0, 3.0],
+    40: [4.0],  # Less common
+    41: [4.0],  # Less common
+    42: [4.5, 3.0],
+    43: [4.5],  # Less common
+    44: [4.5],  # Less common
+    45: [4.5, 3.0],
+    46: [4.5],  # Less common
+    47: [4.5],  # Less common
+    48: [5.0, 3.0],
+    49: [5.0],  # Less common
+    50: [5.0, 3.0]
+}
+OFFSETS = [.0, .1, .2, .3, .4, .5, .6, .7, .8, .9]
 
 
 def designator(val: float):
@@ -55,7 +108,9 @@ class Metric3Dprinted(ThreadProfile):
         return SIZES
 
     def designations(self, size):
-        return [Metric3Dprinted.Designation(size, pitch) for pitch in PITCHES]
+        # Get pitches for this size, default to [0.5] if not defined
+        pitches = ISO_PITCHES.get(size, [0.5])
+        return [Metric3Dprinted.Designation(size, pitch) for pitch in pitches]
 
     def threads(self, designation):
         ts = []
@@ -119,7 +174,7 @@ def generate():
                     ET.SubElement(thread_element, "TapDrill").text = "{:.4g}".format(thread.tapDrill)
 
     ET.indent(tree)
-    tree.write('3DPrintedMetricV3.xml', encoding='UTF-8', xml_declaration=True)
+    tree.write('3DPrintedMetricV4.xml', encoding='UTF-8', xml_declaration=True)
 
 
 generate()
