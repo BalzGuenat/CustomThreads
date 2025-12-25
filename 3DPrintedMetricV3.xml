@@ -4,6 +4,7 @@
   <CustomName>3D-printed Metric Threads V3</CustomName>
   <Unit>mm</Unit>
   <Angle>60.0</Angle>
+  <ThreadForm>8</ThreadForm>
   <SortOrder>3</SortOrder>
   <ThreadSize>
     <Size>8</Size>

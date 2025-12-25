@@ -8,7 +8,7 @@ This project defines thread profiles that are aimed at 3D printing so that they 
 The provided `3DPrintedMetricV3.xml` file contains the thread profiles listed below.
 Additional profiles can be easily generated from the included Python script.
 
-**Shape:** 60° trapezoidal  
+**Shape:** 60° whitworth
 **Size (OD):** 8-50mm  
 **Pitch:** 3.5mm, 5mm  
 **Classes:** O.0, O.1, O.2, O.4, O.8
@@ -51,9 +51,16 @@ The script has no parameters and can be executed like so:
 python main.py
 ```
 
-This will create a file named `output.xml` in the working directory which you can then rename and install in Fusion as described above.
+This will create a file named `3DPrintedMetricV3.xml` in the working directory which you can then rename and install in Fusion as described above.
 
 To customize the generated profiles, simply edit the values defined at the top of `main.py`.
+
+To change the profile of the thread change the "THREAD_FORM" variable and reference the below chart.
+
+0 = Trapezoidal
+1 = sharp V shape
+6 = Square
+8 = whitworth
 
 ```python
 NAME = "3D-printed Metric Threads V3"
@@ -62,4 +69,5 @@ ANGLE = 60.0
 SIZES = list(range(8, 51))
 PITCHES = [3.5, 5.0]
 OFFSETS = [.0, .1, .2, .4, .8]
+THREAD_FORM = 8
 ```

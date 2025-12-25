@@ -8,6 +8,7 @@ ANGLE = 60.0
 SIZES = list(range(8, 51))
 PITCHES = [3.5, 5.0]
 OFFSETS = [.0, .1, .2, .4, .8]
+THREAD_FORM = 8
 
 
 def designator(val: float):
@@ -98,6 +99,7 @@ def generate():
     ET.SubElement(root, "CustomName").text = NAME
     ET.SubElement(root, "Unit").text = UNIT
     ET.SubElement(root, "Angle").text = str(ANGLE)
+    ET.SubElement(root, "ThreadForm").text = str(THREAD_FORM)
     ET.SubElement(root, "SortOrder").text = "3"
 
     for size in profile.sizes():
