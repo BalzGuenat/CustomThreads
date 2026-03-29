@@ -1,0 +1,92 @@
+name: Generate and Release XML Thread Profiles
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  generate-and-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Permission to create releases
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      
+      - name: Cache Poetry dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+      
+      - name: Install dependencies
+        run: poetry install
+      
+      - name: Generate XML thread profiles
+        run: |
+          poetry run python -m customthreads.cli
+          # Also generate with alternative configurations (optional)
+          mkdir -p build/xml
+          mv 3DPrintedMetricThreads.xml build/xml/
+
+      - name: Run tests and validate generated XML
+        run: |
+          poetry run pytest -v
+          python3 -c "import xml.etree.ElementTree as ET; ET.parse('build/xml/3DPrintedMetricThreads.xml'); print('✅ Generated XML is valid')"
+      
+      - name: Create datetime-based version tag
+        id: version
+        run: |
+          VERSION=$(date -u +"v%Y.%m.%d-%H%M%S-r${{ github.run_number }}")
+          GENERATED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "generated_at=$GENERATED_AT" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+      
+      - name: Create release and upload asset
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          prerelease: false
+          name: XML Thread Profiles ${{ steps.version.outputs.version }}
+          tag_name: ${{ steps.version.outputs.version }}
+          body: |
+            Automatically generated 3D-printed metric thread profiles in XML format.
+
+            **Generated:** ${{ steps.version.outputs.generated_at }}
+            **Commit:** ${{ github.sha }}
+
+            ## Contents
+            - `3DPrintedMetricThreads.xml` - Thread profiles from 8mm to 50mm diameter, pitches 1.0mm to 6.0mm, 5 tolerance classes (O.0 to O.8)
+
+            ## Usage
+            1. Download the XML file
+            2. Place in Fusion 360 thread data directory (see README)
+            3. Restart Fusion 360
+
+            Use these profiles for 3D-printed metric threads optimized for FDM printing.
+          files: |
+            ./build/xml/3DPrintedMetricThreads.xml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CustomThreads Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">GitHub Pages Tool</p>
+      <h1>3D-Printed Metric Thread XML Generator</h1>
+      <p class="subtitle">Generate Fusion 360 compatible XML profiles directly in your browser. No local Python required. Live app: <a class="live-link" href="https://eckphi.github.io/CustomThreads/" target="_blank" rel="noreferrer">https://eckphi.github.io/CustomThreads/</a></p>
+      <p class="subtitle">Source code: <a class="live-link" href="https://github.com/EckPhi/CustomThreads" target="_blank" rel="noreferrer">https://github.com/EckPhi/CustomThreads</a></p>
+    </section>
+
+    <section class="panel grid">
+      <form id="config-form" class="card controls" novalidate>
+        <h2>Generator Settings</h2>
+
+        <div class="field-row">
+          <label for="threadName">Thread Name</label>
+          <input id="threadName" name="threadName" value="3D-Printed Metric Threads V3" required>
+        </div>
+
+        <div class="field-row split-3">
+          <div>
+            <label for="pitchStart">Pitch Start (mm)</label>
+            <input id="pitchStart" name="pitchStart" type="number" min="0.1" step="0.1" value="1.0" required>
+          </div>
+          <div>
+            <label for="pitchEnd">Pitch End (mm)</label>
+            <input id="pitchEnd" name="pitchEnd" type="number" min="0.1" step="0.1" value="6.0" required>
+          </div>
+          <div>
+            <label for="pitchStep">Pitch Step (mm)</label>
+            <input id="pitchStep" name="pitchStep" type="number" min="0.1" step="0.1" value="0.5" required>
+          </div>
+        </div>
+
+        <div class="field-row split-2">
+          <div>
+            <label for="sizeMin">Min Diameter (mm)</label>
+            <input id="sizeMin" name="sizeMin" type="number" min="1" step="1" value="8" required>
+          </div>
+          <div>
+            <label for="sizeMax">Max Diameter (mm)</label>
+            <input id="sizeMax" name="sizeMax" type="number" min="1" step="1" value="50" required>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <label for="offsets">Tolerance Offsets (comma-separated)</label>
+          <input id="offsets" name="offsets" value="0.0, 0.1, 0.2, 0.4, 0.8" required>
+        </div>
+
+        <div class="field-row split-4">
+          <div>
+            <label for="unit">Unit</label>
+            <input id="unit" name="unit" value="mm" required>
+          </div>
+          <div>
+            <label for="angle">Angle</label>
+            <input id="angle" name="angle" type="number" step="0.1" value="60.0" required>
+          </div>
+          <div>
+            <label for="threadForm">Thread Form</label>
+            <input id="threadForm" name="threadForm" type="number" step="1" value="8" required>
+          </div>
+          <div>
+            <label for="filename">Output File</label>
+            <input id="filename" name="filename" value="3DPrintedMetricThreads.xml" required>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="generateBtn" type="submit">Generate Preview</button>
+          <button id="downloadBtn" type="button" disabled>Download XML</button>
+          <button id="shareBtn" type="button">Copy Share Link</button>
+        </div>
+
+        <ul id="errors" class="errors" aria-live="polite"></ul>
+      </form>
+
+      <section class="card output" aria-live="polite">
+        <h2>Output Preview</h2>
+        <div id="summary" class="summary empty">No output generated yet.</div>
+        <pre id="xmlPreview" class="xml-preview"></pre>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
